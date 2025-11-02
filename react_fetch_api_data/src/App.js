@@ -1,23 +1,30 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
+import Axios from 'axios';
+
 import './App.css';
 
+
+
 function App() {
+
+  const [apiData, setApiData] = useState();
+
+  useEffect(() => {
+    fetchOnClick();
+
+  }, []);
+
+  const fetchOnClick = () => {
+    //use axios for data fetching
+    Axios.get("https://catfact.ninja/fact").then((res) => {
+      setApiData(res.data.fact);
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React Data Fetch
-        </a>
-      </header>
+      <button onClick={fetchOnClick} >Generate Api Data</button>
+      <p> {apiData}</p>
     </div>
   );
 }
