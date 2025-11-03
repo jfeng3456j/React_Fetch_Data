@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Axios from "axios";
+
+import "./App.css";
+import ApiButton from "./components/ApiButton";
 
 function App() {
+  const [apiData, setApiData] = useState("");
+
+  const fetchData = (category) => {
+    Axios.get(`https://excuser-three.vercel.app/v1/excuse/${category}/`)
+      .then((response) => {
+        console.log(response.data);
+        setApiData(response.data[0]);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+        setApiData("Error fetching data");
+      });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+      <h1> Fetch Api to make execuses</h1>
+
+      <ApiButton name="Party" category="party" onClick={fetchData} />
+      <br></br>
+      <ApiButton name="Family" category="family" onClick={fetchData} />
+      <br></br>
+      <ApiButton name="Office" category="office" onClick={fetchData} />
+
+      {(
+        <p style={{ marginTop: "20px", fontWeight: "bold" }}>
+          Excuse: {apiData.excuse}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React Data Fetch
-        </a>
-      </header>
+      )}
     </div>
   );
 }
