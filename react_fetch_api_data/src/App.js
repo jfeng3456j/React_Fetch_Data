@@ -19,6 +19,11 @@ function App() {
     Axios.get("https://catfact.ninja/fact").then((res) => {
       setApiData(res.data.fact);
     })
+      .catch(
+        (error) => {
+          setApiData("Error retrieving data", error);
+        }
+      )
   }
 
   return (
