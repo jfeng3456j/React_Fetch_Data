@@ -7,7 +7,12 @@ import ApiButton from "./components/ApiButton";
 function App() {
   const [apiData, setApiData] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const fetchData = (category) => {
+    setLoading(true);
+    setApiData(null);
+
     Axios.get(`https://excuser-three.vercel.app/v1/excuse/${category}/`)
       .then((response) => {
         console.log(response.data);
@@ -16,6 +21,9 @@ function App() {
       .catch((error) => {
         console.error("There was an error!", error);
         setApiData("Error fetching data");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -29,11 +37,13 @@ function App() {
       <br></br>
       <ApiButton name="Office" category="office" onClick={fetchData} />
 
-      {(
+      {loading && (<p style={{ marginTop: "20px", fontWeight: "bold", color: "gray" }}>Loading...</p>)}
+
+      {
         <p style={{ marginTop: "20px", fontWeight: "bold" }}>
           Excuse: {apiData.excuse}
         </p>
-      )}
+      }
     </div>
   );
 }
